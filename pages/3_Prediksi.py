@@ -119,7 +119,7 @@ if st.button("Proses Prediksi"):
     st.success("Prediksi selesai!")
 
     st.dataframe(
-        df.head(),
+        df[["clean_text", "prediksi", "kategori", "confidence"]].head(),
         column_config={
             "confidence": st.column_config.ProgressColumn(
                 "Confidence",
@@ -133,6 +133,7 @@ st.markdown("---")
 
 if st.button("📊 Lihat Analisis Tren", use_container_width=True):
     st.switch_page("pages/4_Analisis_Tren.py")
+
 
 
 
