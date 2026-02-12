@@ -84,6 +84,15 @@ if "data_prediksi" not in st.session_state:
 
 df = st.session_state["data_prediksi"]
 
+trend_counts = df["kategori"].value_counts()
+
+col1, col2, col3 = st.columns(3)
+
+col1.metric("Total Data", len(df))
+col2.metric("Kategori Dominan", trend_counts.idxmax())
+col3.metric("Jumlah Kategori", trend_counts.size)
+
+
 st.subheader("Data Hasil Prediksi")
 st.dataframe(df[["clean_text", "kategori"]])
 
@@ -95,16 +104,38 @@ trend["Persentase"] = (trend["Jumlah"] / trend["Jumlah"].sum()) * 100
 trend["Persentase"] = trend["Persentase"].round(2).astype(str) + " %"
 
 
-st.subheader("Tabel Tren")
-st.dataframe(trend)
+col1, col2 = st.columns(2)
 
-# ===== Grafik =====
-st.subheader("Grafik Tren")
+with col1:
+    st.subheader("📋 Tabel Tren")
+    st.dataframe(trend, use_container_width=True)
 
-fig, ax = plt.subplots(figsize=(6, 3))
-ax.bar(trend["Kategori"], trend["Jumlah"])
-ax.set_ylabel("Jumlah Data")
-ax.set_xlabel("Kategori")
+with col2:
+    st.subheader("📊 Grafik Tren")
+
+    fig, ax = plt.subplots(figsize=(5, 3))
+    ax.bar(trend["Kategori"], trend["Jumlah"])
+    ax.set_ylabel("Jumlah")
+    ax.set_xlabel("Kategori")
+
+    st.pyplot(fig)
+
+
+st.info(
+    f"Kategori paling dominan adalah **{trend_counts.idxmax()}** "
+    f"dengan total {trend_counts.max()} data."
+)
+
+selected = st.selectbox(
+    "🔍 Lihat detail kategori:",
+    df["kategori"].unique()
+)
+
+filtered = df[df["kategori"] == selected]
+
+st.dataframe(filtered.head(10), use_container_width=True)
+
 
 st.pyplot(fig, use_container_width=False)
+
 
