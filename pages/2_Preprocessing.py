@@ -91,7 +91,14 @@ text_col = st.session_state["text_column"]
 st.subheader("Preview Data Awal")
 st.dataframe(df.head())
 
-# ========================
+def calculate_change(before, after):
+    changed = (before != after).sum()
+    total = len(before)
+    percent = (changed / total) * 100
+    return changed, percent
+
+
+#========================
 # CASE FOLDING
 # ========================
 st.subheader("1️⃣ Case Folding")
@@ -104,6 +111,15 @@ before_after_cf = pd.DataFrame({
 })
 
 st.dataframe(before_after_cf)
+
+changed, percent = calculate_change(df[text_col], df["case_folding"])
+
+st.metric(
+    "Case Folding Changed",
+    f"{changed} teks",
+    f"{percent:.1f}%"
+)
+
 
 # ========================
 # TEXT CLEANSING
@@ -182,3 +198,4 @@ st.markdown("---")
 
 if st.button("🔎 Lihat Hasil Prediksi", use_container_width=True):
     st.switch_page("pages/3_Prediksi.py")
+
