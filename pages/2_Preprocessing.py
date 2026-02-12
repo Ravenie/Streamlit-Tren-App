@@ -141,6 +141,15 @@ before_after_clean = pd.DataFrame({
 
 st.dataframe(before_after_clean)
 
+changed, percent = calculate_change(df["case_folding"], df["cleaning"])
+
+st.metric(
+    "Cleaning Changed",
+    f"{changed} teks",
+    f"{percent:.1f}%"
+)
+
+
 # ========================
 # NORMALIZATION (contoh sederhana)
 # ========================
@@ -168,6 +177,15 @@ before_after_norm = pd.DataFrame({
 
 st.dataframe(before_after_norm)
 
+changed, percent = calculate_change(df["cleaning"], df["normalized"])
+
+st.metric(
+    "Normalization Changed",
+    f"{changed} teks",
+    f"{percent:.1f}%"
+)
+
+
 # ========================
 # TOKENIZATION
 # ========================
@@ -181,6 +199,16 @@ before_after_token = pd.DataFrame({
 })
 
 st.dataframe(before_after_token)
+
+changed = len(df)
+percent = 100
+
+st.metric(
+    "Tokenization Applied",
+    f"{changed} teks",
+    "100%"
+)
+
 
 # ========================
 # HASIL FINAL CLEAN TEXT
@@ -198,4 +226,5 @@ st.markdown("---")
 
 if st.button("🔎 Lihat Hasil Prediksi", use_container_width=True):
     st.switch_page("pages/3_Prediksi.py")
+
 
