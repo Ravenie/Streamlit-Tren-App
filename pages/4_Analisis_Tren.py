@@ -133,9 +133,23 @@ selected = st.selectbox(
 
 filtered = df[df["kategori"] == selected]
 
-st.dataframe(filtered.head(10), use_container_width=True)
+display_cols = ["clean_text", "prediksi", "kategori", "confidence"]
+
+st.dataframe(
+    filtered[display_cols].head(20),
+    column_config={
+        "confidence": st.column_config.ProgressColumn(
+            "Confidence",
+            min_value=0,
+            max_value=1,
+        )
+    },
+    use_container_width=True
+)
+
 
 
 st.pyplot(fig, use_container_width=False)
+
 
 
