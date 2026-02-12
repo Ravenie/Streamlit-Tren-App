@@ -94,53 +94,46 @@ label_map = {
 
 if st.button("Proses Prediksi"):
 
-    # dummy prediksi dulu
     import numpy as np
 
-pred_labels = []
-confidences = []
+    pred_labels = []
+    confidences = []
 
-for _ in range(len(df)):
+    for _ in range(len(df)):
 
-    # buat probabilitas acak
-    probs = np.random.dirichlet(np.ones(5))
+        # probabilitas acak
+        probs = np.random.dirichlet(np.ones(5))
 
-    label = np.argmax(probs)
-    confidence = probs[label]
+        label = np.argmax(probs)
+        confidence = probs[label]
 
-    pred_labels.append(label)
-    confidences.append(confidence)
+        pred_labels.append(label)
+        confidences.append(confidence)
 
-df["prediksi"] = pred_labels
-df["kategori"] = df["prediksi"].map(label_map)
-df["confidence"] = [f"{c*100:.1f}%" for c in confidences]
-
+    df["prediksi"] = pred_labels
+    df["kategori"] = df["prediksi"].map(label_map)
+    df["confidence"] = confidences  # simpan float untuk progress bar
 
     st.session_state["data_prediksi"] = df
 
     st.success("Prediksi selesai!")
 
     st.dataframe(
-    df[["clean_text", "kategori", "confidence"]].head()
-)
-
-st.dataframe(
-    df.head(),
-    column_config={
-        "confidence": st.column_config.ProgressColumn(
-            "Confidence",
-            min_value=0,
-            max_value=1,
-        )
-    }
-)
-
-
+        df.head(),
+        column_config={
+            "confidence": st.column_config.ProgressColumn(
+                "Confidence",
+                min_value=0,
+                max_value=1,
+            )
+        }
+    )
 
 st.markdown("---")
 
 if st.button("📊 Lihat Analisis Tren", use_container_width=True):
     st.switch_page("pages/4_Analisis_Tren.py")
+
 
 
 
