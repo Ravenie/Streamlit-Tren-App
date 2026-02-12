@@ -149,7 +149,6 @@ st.dataframe(
 
 
 
-st.pyplot(fig, use_container_width=False)
 
 
 
